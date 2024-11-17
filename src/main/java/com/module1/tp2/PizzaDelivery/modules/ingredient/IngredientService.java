@@ -15,8 +15,16 @@ public class IngredientService {
     return (List<Ingredient>) ingredientRepository.findAll();
   }
 
+  public List<Ingredient> getIngredientsById(List<Long> ids) {
+    return (List<Ingredient>) ingredientRepository.findAllById(ids);
+  }
+
   public Optional<Ingredient> getIngredientById(Long id) {
     return ingredientRepository.findById(id);
+  }
+
+  public Ingredient getIngredientByName(String name) {
+    return ingredientRepository.findByName(name);
   }
 
   public Ingredient createIngredient(Ingredient ingredient) {
@@ -25,5 +33,16 @@ public class IngredientService {
 
   public List<Ingredient> createIngredientsInBulk(List<Ingredient> ingredients) {
     return (List<Ingredient>) ingredientRepository.saveAll(ingredients);
+  }
+
+  public double getTotalPrice(List<Ingredient> ingredients) {
+    double total = 0;
+    for (Ingredient ingredient : ingredients) {
+      Optional<Ingredient> ingredientFound = getIngredientById(ingredient.getId());
+      if (ingredientFound.isPresent()) {
+        total += ingredientFound.get().getPrice();
+      }
+    }
+    return total;
   }
 }
